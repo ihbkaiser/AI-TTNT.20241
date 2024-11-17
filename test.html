@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map Example</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="folium-map" id="map_f93e53828f1eb9a5fb34bca1bc0c5272" style="width: 100%; height: 980px;"></div>
+    <script>
+        var map = L.map('map_f93e53828f1eb9a5fb34bca1bc0c5272').setView([21.04, 105.847], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var start_marker = null;
+        var end_marker = null;
+        var click_coords = [];
+
+        function onMapClick(e) {
+
+            if (click_coords.length == 2) {
+                // Reset the markers and coordinates when 2 points are already clicked
+                map.removeLayer(start_marker);
+                map.removeLayer(end_marker);
+                click_coords = [];
+            }
+
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+            
+            click_coords.push([lat, lng]);
+            
+            if (click_coords.length == 1) {
+                start_marker = L.marker([lat, lng]).addTo(map).bindPopup("Start Point").openPopup();
+            } else if (click_coords.length == 2) {
+                end_marker = L.marker([lat, lng]).addTo(map).bindPopup("End Point").openPopup();
+                window.pywebview.api.send_coordinates(click_coords);
+            }
+        }
+        
+        map.on('click', onMapClick);
+
+        // Define the coordinates for the points to be marked
+        var points = [{'lat': 21.0400597, 'lng': 105.8477713, 'popup': 'Point 1'},
+        {'lat': 21.040873, 'lng': 105.8474489, 'popup': 'Point 2'},
+        {'lat': 21.0419565, 'lng': 105.8472071, 'popup': 'Point 3'},
+        {'lat': 21.0431555, 'lng': 105.8471399, 'popup': 'Point 4'},
+        {'lat': 21.0421582, 'lng': 105.847765, 'popup': 'Point 5'},
+        {'lat': 21.0421467, 'lng': 105.8461353, 'popup': 'Point 6'},
+        {'lat': 21.0423004, 'lng': 105.8452864, 'popup': 'Point 7'},
+        {'lat': 21.0434219, 'lng': 105.8456115, 'popup': 'Point 8'},
+        {'lat': 21.0419656, 'lng': 105.8451104, 'popup': 'Point 9'},
+        {'lat': 21.0416015, 'lng': 105.8458198, 'popup': 'Point 10'},
+        {'lat': 21.0406957, 'lng': 105.8499291, 'popup': 'Point 11'},
+        {'lat': 21.0402995, 'lng': 105.8471626, 'popup': 'Point 12'},
+        {'lat': 21.0409583, 'lng': 105.8502103, 'popup': 'Point 13'},
+        {'lat': 21.0436438, 'lng': 105.8472647, 'popup': 'Point 14'},
+        {'lat': 21.0446403, 'lng': 105.8460855, 'popup': 'Point 15'},
+        {'lat': 21.0403271, 'lng': 105.8476312, 'popup': 'Point 16'},
+        {'lat': 21.0404869, 'lng': 105.8492207, 'popup': 'Point 17'},
+        {'lat': 21.0438666, 'lng': 105.8457919, 'popup': 'Point 18'},
+        {'lat': 21.041274, 'lng': 105.8489485, 'popup': 'Point 19'},
+        {'lat': 21.0402992, 'lng': 105.8485838, 'popup': 'Point 20'},
+        {'lat': 21.0410964, 'lng': 105.8483118, 'popup': 'Point 21'},
+        {'lat': 21.042419, 'lng': 105.8482165, 'popup': 'Point 22'},
+        {'lat': 21.0418299, 'lng': 105.8487038, 'popup': 'Point 23'},
+        {'lat': 21.0416463, 'lng': 105.84889, 'popup': 'Point 24'},
+        {'lat': 21.0418831, 'lng': 105.8491237, 'popup': 'Point 25'},
+        {'lat': 21.0415988, 'lng': 105.8491193, 'popup': 'Point 26'},
+        {'lat': 21.0416366, 'lng': 105.8492445, 'popup': 'Point 27'},
+        {'lat': 21.0422357, 'lng': 105.8485179, 'popup': 'Point 28'},
+        {'lat': 21.0419966, 'lng': 105.8485621, 'popup': 'Point 29'},
+        {'lat': 21.0437041, 'lng': 105.8473555, 'popup': 'Point 30'},
+        {'lat': 21.0408945, 'lng': 105.8500297, 'popup': 'Point 31'},
+        {'lat': 21.0407645, 'lng': 105.8500268, 'popup': 'Point 32'},
+        {'lat': 21.0409032, 'lng': 105.8501565, 'popup': 'Point 33'},
+        {'lat': 21.0407526, 'lng': 105.8500098, 'popup': 'Point 34'},
+        {'lat': 21.0408454, 'lng': 105.8500736, 'popup': 'Point 35'},
+        {'lat': 21.0410786, 'lng': 105.8498123, 'popup': 'Point 36'},
+        {'lat': 21.0409239, 'lng': 105.8501774, 'popup': 'Point 37'},
+        {'lat': 21.0408089, 'lng': 105.8500745, 'popup': 'Point 38'},
+        {'lat': 21.0415753, 'lng': 105.8492432, 'popup': 'Point 39'},
+        {'lat': 21.0437622, 'lng': 105.84744, 'popup': 'Point 40'},
+        {'lat': 21.0408488, 'lng': 105.8501119, 'popup': 'Point 41'},
+        {'lat': 21.0435529, 'lng': 105.8471568, 'popup': 'Point 42'},
+        {'lat': 21.0443659, 'lng': 105.8459777, 'popup': 'Point 43'},
+        {'lat': 21.042035, 'lng': 105.8489665, 'popup': 'Point 44'},
+        {'lat': 21.0421369, 'lng': 105.8488517, 'popup': 'Point 45'},
+        {'lat': 21.0410129, 'lng': 105.8487453, 'popup': 'Point 46'},
+        {'lat': 21.0411998, 'lng': 105.848684, 'popup': 'Point 47'},
+        {'lat': 21.0407901, 'lng': 105.8467732, 'popup': 'Point 48'},
+        {'lat': 21.0412297, 'lng': 105.8464145, 'popup': 'Point 49'},
+        {'lat': 21.0408664, 'lng': 105.8464855, 'popup': 'Point 50'},
+        {'lat': 21.0403422, 'lng': 105.8466182, 'popup': 'Point 51'},
+        {'lat': 21.0407642, 'lng': 105.8484271, 'popup': 'Point 52'},
+        {'lat': 21.0401574, 'lng': 105.8481027, 'popup': 'Point 53'},
+        {'lat': 21.0410779, 'lng': 105.8500657, 'popup': 'Point 54'},
+        {'lat': 21.0438146, 'lng': 105.8473941, 'popup': 'Point 55'},
+        {'lat': 21.0436974, 'lng': 105.8474985, 'popup': 'Point 56'},
+        {'lat': 21.0435813, 'lng': 105.8473158, 'popup': 'Point 57'},
+        {'lat': 21.0436995, 'lng': 105.8472199, 'popup': 'Point 58'},
+        {'lat': 21.0436412, 'lng': 105.84741, 'popup': 'Point 59'},
+        {'lat': 21.043756, 'lng': 105.8473087, 'popup': 'Point 60'},
+        {'lat': 21.040847, 'lng': 105.8497974, 'popup': 'Point 61'},
+        {'lat': 21.0444346, 'lng': 105.8463747, 'popup': 'Point 62'},
+        {'lat': 21.0432536, 'lng': 105.847583, 'popup': 'Point 63'},
+        {'lat': 21.0431645, 'lng': 105.8452731, 'popup': 'Point 64'},
+        {'lat': 21.0430854, 'lng': 105.8455131, 'popup': 'Point 65'},
+        {'lat': 21.0410855, 'lng': 105.8472003, 'popup': 'Point 66'},
+        {'lat': 21.0411274, 'lng': 105.8473891, 'popup': 'Point 67'},
+        {'lat': 21.0411631, 'lng': 105.8471775, 'popup': 'Point 68'},
+        {'lat': 21.0412021, 'lng': 105.8473715, 'popup': 'Point 69'},
+        {'lat': 21.0419442, 'lng': 105.846291, 'popup': 'Point 70'},
+        {'lat': 21.0421112, 'lng': 105.8463351, 'popup': 'Point 71'},
+        {'lat': 21.0428416, 'lng': 105.845186, 'popup': 'Point 72'},
+        {'lat': 21.0427661, 'lng': 105.8454205, 'popup': 'Point 73'},
+        {'lat': 21.0428909, 'lng': 105.8454567, 'popup': 'Point 74'},
+        {'lat': 21.041645, 'lng': 105.8475316, 'popup': 'Point 75'},
+        {'lat': 21.0415931, 'lng': 105.8472795, 'popup': 'Point 76'},
+        {'lat': 21.0412795, 'lng': 105.8475597, 'popup': 'Point 77'},
+        {'lat': 21.041242, 'lng': 105.8473621, 'popup': 'Point 78'},
+        {'lat': 21.0424561, 'lng': 105.8455615, 'popup': 'Point 79'},
+        {'lat': 21.0425227, 'lng': 105.8453498, 'popup': 'Point 80'},
+        {'lat': 21.0428187, 'lng': 105.8457306, 'popup': 'Point 81'},
+        {'lat': 21.0414241, 'lng': 105.8491255, 'popup': 'Point 82'},
+        {'lat': 21.0411403, 'lng': 105.8455175, 'popup': 'Point 83'},
+        {'lat': 21.0412877, 'lng': 105.8452188, 'popup': 'Point 84'},
+        {'lat': 21.0413179, 'lng': 105.8456339, 'popup': 'Point 85'},
+        {'lat': 21.0411856, 'lng': 105.8458498, 'popup': 'Point 86'},
+        {'lat': 21.0412595, 'lng': 105.8459155, 'popup': 'Point 87'},
+        {'lat': 21.0415411, 'lng': 105.8454488, 'popup': 'Point 88'},
+        {'lat': 21.041403, 'lng': 105.8456897, 'popup': 'Point 89'},
+        {'lat': 21.0415399, 'lng': 105.8452061, 'popup': 'Point 90'},
+        {'lat': 21.041389, 'lng': 105.8451194, 'popup': 'Point 91'},
+        {'lat': 21.0413621, 'lng': 105.8451712, 'popup': 'Point 92'},
+        {'lat': 21.0415269, 'lng': 105.8448573, 'popup': 'Point 93'},
+        {'lat': 21.0419767, 'lng': 105.8447018, 'popup': 'Point 94'},
+        {'lat': 21.0418347, 'lng': 105.8450386, 'popup': 'Point 95'},
+        {'lat': 21.0417915, 'lng': 105.8447099, 'popup': 'Point 96'},
+        {'lat': 21.0416017, 'lng': 105.8449035, 'popup': 'Point 97'},
+        {'lat': 21.0423998, 'lng': 105.8443987, 'popup': 'Point 98'},
+        {'lat': 21.0409641, 'lng': 105.8455588, 'popup': 'Point 99'},
+        {'lat': 21.0406958, 'lng': 105.8457872, 'popup': 'Point 100'},
+        {'lat': 21.0410517, 'lng': 105.8456044, 'popup': 'Point 101'},
+        {'lat': 21.0407689, 'lng': 105.845873, 'popup': 'Point 102'},
+        {'lat': 21.0413258, 'lng': 105.8460993, 'popup': 'Point 103'},
+        {'lat': 21.0409715, 'lng': 105.8461111, 'popup': 'Point 104'},
+        {'lat': 21.040874, 'lng': 105.8463795, 'popup': 'Point 105'},
+        {'lat': 21.0406583, 'lng': 105.846636, 'popup': 'Point 106'},
+        {'lat': 21.0407276, 'lng': 105.8471138, 'popup': 'Point 107'},
+        {'lat': 21.0403043, 'lng': 105.8470977, 'popup': 'Point 108'},
+        {'lat': 21.04074, 'lng': 105.8469764, 'popup': 'Point 109'},
+        {'lat': 21.0403125, 'lng': 105.8469618, 'popup': 'Point 110'},
+        {'lat': 21.0409115, 'lng': 105.847093, 'popup': 'Point 111'},
+        {'lat': 21.0409834, 'lng': 105.8474229, 'popup': 'Point 112'},
+        {'lat': 21.0408489, 'lng': 105.8470125, 'popup': 'Point 113'},
+        {'lat': 21.0413481, 'lng': 105.8465436, 'popup': 'Point 114'},
+        {'lat': 21.0416419, 'lng': 105.8462611, 'popup': 'Point 115'},
+        {'lat': 21.0415474, 'lng': 105.8461449, 'popup': 'Point 116'},
+        {'lat': 21.0414963, 'lng': 105.8467052, 'popup': 'Point 117'},
+        {'lat': 21.0444724, 'lng': 105.8460195, 'popup': 'Point 118'},
+        {'lat': 21.0433172, 'lng': 105.8468339, 'popup': 'Point 119'},
+        {'lat': 21.0432116, 'lng': 105.8468183, 'popup': 'Point 120'}]
+
+        // Create a red marker icon
+        var redMarker = L.AwesomeMarkers.icon({
+            icon: 'info-sign',
+            markerColor: 'red',
+            prefix: 'glyphicon'
+        });
+
+        // Create and add markers for each point
+        points.forEach(function(point) {
+            L.marker([point.lat, point.lng], {icon: redMarker}).addTo(map).bindPopup(point.popup);
+        });
+    </script>
+</body>
+</html>
