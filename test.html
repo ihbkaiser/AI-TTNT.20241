@@ -21,30 +21,35 @@
 
         var start_marker = null;
         var end_marker = null;
+        var polyline = null;
         var click_coords = [];
 
         function onMapClick(e) {
-
             if (click_coords.length == 2) {
-                // Reset the markers and coordinates when 2 points are already clicked
                 map.removeLayer(start_marker);
                 map.removeLayer(end_marker);
+                map.removeLayer(polyline);
                 click_coords = [];
             }
-
             var lat = e.latlng.lat;
             var lng = e.latlng.lng;
             
             click_coords.push([lat, lng]);
-            
             if (click_coords.length == 1) {
                 start_marker = L.marker([lat, lng]).addTo(map).bindPopup("Start Point").openPopup();
             } else if (click_coords.length == 2) {
                 end_marker = L.marker([lat, lng]).addTo(map).bindPopup("End Point").openPopup();
-                window.pywebview.api.send_coordinates(click_coords);
+                // window.pywebview.api.send_coordinates(click_coords);
+                
+                // Draw a line between the start and end points
+                // polyline = L.polyline(click_coords, {color: 'blue'}).addTo(map);
+                window.pywebview.api.send_coordinates(click_coords).then(function(path) {
+                    // Draw the path returned by the API
+                    polyline = L.polyline(path, {color: 'blue'}).addTo(map);
+                });
             }
         }
-        
+    
         map.on('click', onMapClick);
 
         // Define the coordinates for the points to be marked
@@ -173,12 +178,13 @@
         var redMarker = L.AwesomeMarkers.icon({
             icon: 'info-sign',
             markerColor: 'red',
-            prefix: 'glyphicon'
+            prefix: 'glyphicon',
         });
+
 
         // Create and add markers for each point
         points.forEach(function(point) {
-            L.marker([point.lat, point.lng], {icon: redMarker}).addTo(map).bindPopup(point.popup);
+           L.marker([point.lat, point.lng], {icon: redMarker}).addTo(map).bindPopup(point.popup);
         });
     </script>
 </body>
