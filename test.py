@@ -2,12 +2,6 @@ import webview
 import json 
 import networkx as nx
 
-# class Api:
-#     def send_coordinates(self, coords):
-#         start_coords, end_coords = coords
-#         print(f"Start Coordinates: {start_coords}")
-#         print(f"End Coordinates: {end_coords}")
-#         # Here you can add code to process the coordinates, e.g., calculate the shortest path
         
         
 def load_graph(file_path):

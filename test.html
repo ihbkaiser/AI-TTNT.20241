@@ -9,6 +9,17 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .custom-div-icon {
+            background-color: red;
+            color: black;
+            border-radius: 20%;
+            text-align: center;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="folium-map" id="map_f93e53828f1eb9a5fb34bca1bc0c5272" style="width: 100%; height: 980px;"></div>
@@ -39,14 +50,12 @@
                 start_marker = L.marker([lat, lng]).addTo(map).bindPopup("Start Point").openPopup();
             } else if (click_coords.length == 2) {
                 end_marker = L.marker([lat, lng]).addTo(map).bindPopup("End Point").openPopup();
-                // window.pywebview.api.send_coordinates(click_coords);
-                
-                // Draw a line between the start and end points
-                // polyline = L.polyline(click_coords, {color: 'blue'}).addTo(map);
+
                 window.pywebview.api.send_coordinates(click_coords).then(function(path) {
                     // Draw the path returned by the API
                     polyline = L.polyline(path, {color: 'blue'}).addTo(map);
                 });
+
             }
         }
     
@@ -183,8 +192,12 @@
 
 
         // Create and add markers for each point
-        points.forEach(function(point) {
-           L.marker([point.lat, point.lng], {icon: redMarker}).addTo(map).bindPopup(point.popup);
+        points.forEach(function(point, index) {
+            var customIcon = L.divIcon({
+                className: 'custom-div-icon',
+                html: (index + 1).toString()
+            });
+            L.marker([point.lat, point.lng], {icon: customIcon}).addTo(map).bindPopup('Point ' + (index + 1) + ': ' + point.popup);
         });
     </script>
 </body>
