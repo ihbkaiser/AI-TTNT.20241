@@ -267,10 +267,22 @@ def draw_graph(coordinates, edges, distance, time_taken, path=None, choose_point
 
     pygame.display.flip()
 
-def main(mode):
+def main():
     running = True
     choose_point = []
     path = None
+    current_mode = 'dijkstra'
+    dropdown_open = False
+    
+    # Create dropdown options
+    modes = [('Dijkstra', 'dijkstra'), ('A*', 'a_star'), 
+            ('Bellman-Ford', 'bellman_ford'), ('Floyd-Warshall', 'floyd_warshall')]
+    selected_mode = 'dijkstra'
+    font = pygame.font.Font(None, 36)
+    
+    # Dropdown rectangle
+    dropdown_rect = pygame.Rect(10, 10, 200, 40)
+    options_rects = [pygame.Rect(10, 50 + i*40, 200, 40) for i in range(len(modes))]
 
     draw_graph(coordinates, edges, None, None)
 
@@ -281,30 +293,55 @@ def main(mode):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
-                nearest_idx = find_nearest_point(mouse_pos, coordinates)
-
-                if len(choose_point) < 2:
-                    choose_point.append(mouse_pos)
+                
+                if dropdown_rect.collidepoint(mouse_pos):
+                    dropdown_open = not dropdown_open
+                elif dropdown_open:
+                    for i, rect in enumerate(options_rects):
+                        if rect.collidepoint(mouse_pos):
+                            selected_mode = modes[i][1]
+                            dropdown_open = False
+                            draw_graph(coordinates, edges, None, None, path, choose_point)
                 else:
-                    choose_point = [mouse_pos]
+                    nearest_idx = find_nearest_point(mouse_pos, coordinates)
 
-                if nearest_idx != -1 and len(choose_point) == 2:
-                    time_start = time.time()
-                    start, goal = [find_nearest_point(p, coordinates) for p in choose_point]
-                    
-                    if mode == 'dijkstra':
-                        path, distance = dijkstra(graph, start, goal)
-                    elif mode == 'a_star':
-                        path, distance = a_star(graph, start, goal)
-                    elif mode == 'bellman_ford':
-                        path, distance = bellman_ford(graph, start, goal)
-                    elif mode == 'floyd_warshall':
-                        path, distance = floyd_warshall(graph, start, goal)
-                    time_taken = time.time() - time_start
-                    time_taken = round(time_taken, 6)
-                    distance += calculate_distance(choose_point[0], coordinates[path[0]]) + calculate_distance(choose_point[1], coordinates[path[-1]])
-                    distance = round(distance, 2)
-                    draw_graph(coordinates, edges, distance, time_taken, path, choose_point)
+                    if len(choose_point) < 2:
+                        choose_point.append(mouse_pos)
+                    else:
+                        choose_point = [mouse_pos]
+
+                    if nearest_idx != -1 and len(choose_point) == 2:
+                        time_start = time.time()
+                        start, goal = [find_nearest_point(p, coordinates) for p in choose_point]
+                        
+                        if selected_mode == 'dijkstra':
+                            path, distance = dijkstra(graph, start, goal)
+                        elif selected_mode == 'a_star':
+                            path, distance = a_star(graph, start, goal)
+                        elif selected_mode == 'bellman_ford':
+                            path, distance = bellman_ford(graph, start, goal)
+                        elif selected_mode == 'floyd_warshall':
+                            path, distance = floyd_warshall(graph, start, goal)
+                        
+                        time_taken = time.time() - time_start
+                        time_taken = round(time_taken, 6)
+                        distance += calculate_distance(choose_point[0], coordinates[path[0]]) + calculate_distance(choose_point[1], coordinates[path[-1]])
+                        distance = round(distance, 2)
+                        draw_graph(coordinates, edges, distance, time_taken, path, choose_point)
+
+        # Draw dropdown
+        dropdown_rect = pygame.Rect(0, 0, 350, 50)
+        pygame.draw.rect(screen, (200, 200, 200), dropdown_rect)
+        text = font.render(f"Algorithm: {selected_mode}", True, (0, 0, 0))
+        screen.blit(text, (15, 20))
+
+        if dropdown_open:
+            for i, (name, _) in enumerate(modes):
+                pygame.draw.rect(screen, (220, 220, 220), options_rects[i])
+                text = font.render(name, True, (0, 0, 0))
+                screen.blit(text, (15, 60 + i*40))
+
+        pygame.display.flip()
 
     pygame.quit()
 
